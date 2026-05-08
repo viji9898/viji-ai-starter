@@ -1,0 +1,154 @@
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(245, 158, 11, 0.18),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(20, 83, 45, 0.16),
+      transparent 30%
+    ),
+    linear-gradient(180deg, #f6f0e7 0%, #f9f7f3 48%, #f4efe6 100%);
+}
+
+.app-content {
+  width: min(1160px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.app-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.landing-screen {
+  min-height: calc(100vh - 80px);
+  align-items: center;
+  justify-content: center;
+}
+
+.lead {
+  max-width: 720px;
+  font-size: 18px;
+}
+
+.panel,
+.login-card {
+  border: 1px solid rgba(92, 76, 58, 0.12);
+  box-shadow: 0 24px 80px rgba(56, 42, 29, 0.08);
+}
+
+.panel-accent {
+  background:
+    linear-gradient(
+      155deg,
+      rgba(255, 251, 245, 0.98),
+      rgba(241, 247, 242, 0.95)
+    ),
+    #fff;
+}
+
+.panel-label {
+  color: #6a4f35;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.fill-width {
+  width: 100%;
+}
+
+.login-card {
+  width: min(420px, calc(100vw - 32px));
+}
+
+.login-panel {
+  align-items: center;
+  justify-content: center;
+}
+
+.login-slot {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+}
+
+.login-slot-centered {
+  justify-content: center;
+}
+
+.login-description {
+  margin: 0;
+  text-align: center;
+  color: #5b6470;
+  font-size: 14px;
+}
+
+.identity-panel .ant-card-body {
+  padding: 24px;
+}
+
+.identity-copy h3,
+.probe-card h4 {
+  margin-bottom: 8px !important;
+}
+
+.probe-card,
+.identity-panel {
+  height: 100%;
+}
+
+.probe-divider {
+  margin: 4px 0 0;
+}
+
+.result-block {
+  min-height: 220px;
+  max-height: 360px;
+  margin: 0;
+  padding: 16px;
+  overflow: auto;
+  border-radius: 16px;
+  background: #1f2937;
+  color: #ecfdf5;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 960px) {
+  .app-content {
+    width: min(100vw - 20px, 1160px);
+    padding-top: 20px;
+  }
+
+  .home-header {
+    flex-direction: column;
+  }
+
+  .app-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
