@@ -1,5 +1,6 @@
 import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import EnvironmentBadge from "./EnvironmentBadge";
 
 type AppNavbarProps = {
   currentPath: string;
@@ -13,6 +14,7 @@ function AppNavbar({ currentPath, onLogout, userRole }: AppNavbarProps) {
   return (
     <div className="app-navbar">
       <Space wrap>
+        <EnvironmentBadge />
         <Button
           type={currentPath === "/home" ? "primary" : "default"}
           onClick={() => navigate("/home")}

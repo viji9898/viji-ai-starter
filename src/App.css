@@ -33,6 +33,27 @@
   gap: 16px;
 }
 
+.environment-badge {
+  margin-inline-end: 4px !important;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.environment-badge-dev {
+  color: #8a2d0a;
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(180, 83, 9, 0.24);
+}
+
+.environment-badge-live {
+  color: #14532d;
+  background: rgba(34, 197, 94, 0.14);
+  border-color: rgba(20, 83, 45, 0.24);
+}
+
 .home-header {
   display: flex;
   justify-content: space-between;

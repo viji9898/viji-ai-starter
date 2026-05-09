@@ -1,5 +1,6 @@
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { Alert, Button, Card, Space, Spin, Typography } from "antd";
+import EnvironmentBadge from "../components/EnvironmentBadge";
 
 const { Paragraph, Text } = Typography;
 
@@ -24,6 +25,7 @@ function LandingPage({
           size="large"
           className="fill-width login-panel"
         >
+          <EnvironmentBadge />
           {!clientIdConfigured ? (
             <Alert
               type="warning"
