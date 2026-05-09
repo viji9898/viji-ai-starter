@@ -29,14 +29,14 @@ function getEmailSet(name) {
   );
 }
 
-function getApprovedEmails(admins) {
-  const approved = getEmailSet("APPROVED_EMAILS");
+function getAllowedSigninEmails(admins) {
+  const allowed = getEmailSet("ALLOWED_SIGNIN_EMAILS");
 
   for (const email of admins) {
-    approved.add(email);
+    allowed.add(email);
   }
 
-  return approved;
+  return allowed;
 }
 
 export async function verifyGoogleToken(idToken) {
@@ -77,12 +77,12 @@ export async function verifyGoogleToken(idToken) {
   }
 
   const admins = getEmailSet("ADMIN_EMAILS");
-  const approvedEmails = getApprovedEmails(admins);
+  const allowedSigninEmails = getAllowedSigninEmails(admins);
 
-  if (!approvedEmails.has(email)) {
+  if (!allowedSigninEmails.has(email)) {
     throw new HttpError(
       403,
-      `Email ${email} is not in the approved user list.`,
+      `Email ${email} is not in ALLOWED_SIGNIN_EMAILS or ADMIN_EMAILS.`,
     );
   }
 

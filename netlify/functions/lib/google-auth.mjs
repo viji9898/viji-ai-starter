@@ -36,6 +36,24 @@ export async function createAuthorizedGoogleClient(scopes) {
   return auth;
 }
 
+export async function createAuthorizedGoogleClientForSubject(scopes, subject) {
+  const auth = new google.auth.JWT({
+    email: getRequiredEnv([
+      "GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL",
+      "GOOGLE_CLIENT_EMAIL",
+    ]),
+    key: getRequiredEnv([
+      "GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY",
+      "GOOGLE_PRIVATE_KEY",
+    ]).replace(/\\n/g, "\n"),
+    scopes,
+    subject: subject?.trim() || getRequiredEnv("GOOGLE_IMPERSONATION_USER"),
+  });
+
+  await auth.authorize();
+  return auth;
+}
+
 export function getRequiredGoogleConfig(names) {
   return getRequiredEnv(names);
 }

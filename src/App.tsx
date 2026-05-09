@@ -2,6 +2,7 @@ import { Layout } from "antd";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useAppSession } from "./hooks/useAppSession";
 import LandingPage from "./pages/LandingPage";
+import DomainReadonlyPage from "./pages/DomainReadonlyPage";
 import HomePage from "./pages/HomePage";
 import SessionRestorePage from "./pages/SessionRestorePage";
 import WorkspaceTestsPage from "./pages/WorkspaceTestsPage";
@@ -17,10 +18,13 @@ function App() {
     authBootstrapPending,
     authError,
     authPending,
+    domainProbeResults,
+    domainProbes,
     handleGoogleSuccess,
     handleLogout,
     probeResults,
     probes,
+    runDomainProbe,
     runProbe,
     session,
   } = useAppSession();
@@ -55,6 +59,7 @@ function App() {
                 <HomePage
                   currentPath={location.pathname}
                   onLogout={handleLogout}
+                  userRole={session.user.role}
                 />
               ) : (
                 <Navigate to="/" replace />
@@ -73,6 +78,27 @@ function App() {
                   probes={probes}
                   user={session.user}
                 />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+          <Route
+            path="/domain-readonly"
+            element={
+              session ? (
+                session.user.role === "admin" ? (
+                  <DomainReadonlyPage
+                    currentPath={location.pathname}
+                    onLogout={handleLogout}
+                    onRunProbe={runDomainProbe}
+                    probeResults={domainProbeResults}
+                    probes={domainProbes}
+                    user={session.user}
+                  />
+                ) : (
+                  <Navigate to="/home" replace />
+                )
               ) : (
                 <Navigate to="/" replace />
               )

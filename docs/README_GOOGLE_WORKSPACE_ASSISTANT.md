@@ -155,7 +155,7 @@ VITE_GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_ID=
 ALLOWED_EMAIL_DOMAIN=example.com
 ADMIN_EMAILS=admin@example.com
-APPROVED_EMAILS=
+ALLOWED_SIGNIN_EMAILS=
 
 DATABASE_URL=
 
@@ -172,8 +172,8 @@ SENDGRID_API_KEY=
 
 Notes:
 
-- `APPROVED_EMAILS` is the explicit non-admin allowlist.
-- `ADMIN_EMAILS` users are always implicitly approved.
+- `ALLOWED_SIGNIN_EMAILS` is the explicit non-admin sign-in allowlist.
+- `ADMIN_EMAILS` users are always implicitly approved and are the only users with admin access to delegated domain routes.
 - `GOOGLE_DOCS_TEST_DOCUMENT_ID` and `GOOGLE_SHEETS_TEST_SPREADSHEET_ID` are optional probe ids for the Docs and Sheets test endpoints.
 - `OPENAI_API_KEY` and `SENDGRID_API_KEY` are optional keys for the OpenAI and SendGrid test endpoints.
 - `DATABASE_URL` is used by the Neon Postgres test endpoint and any backend database features.

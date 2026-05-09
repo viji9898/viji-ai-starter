@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 type AppNavbarProps = {
   currentPath: string;
   onLogout: () => void;
+  userRole?: "admin" | "team";
 };
 
-function AppNavbar({ currentPath, onLogout }: AppNavbarProps) {
+function AppNavbar({ currentPath, onLogout, userRole }: AppNavbarProps) {
   const navigate = useNavigate();
 
   return (
@@ -24,6 +25,14 @@ function AppNavbar({ currentPath, onLogout }: AppNavbarProps) {
         >
           Workspace Tests
         </Button>
+        {userRole === "admin" ? (
+          <Button
+            type={currentPath === "/domain-readonly" ? "primary" : "default"}
+            onClick={() => navigate("/domain-readonly")}
+          >
+            Domain Operations
+          </Button>
+        ) : null}
       </Space>
       <Button onClick={onLogout}>Log out</Button>
     </div>

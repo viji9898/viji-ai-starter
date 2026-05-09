@@ -122,6 +122,45 @@
   margin: 4px 0 0;
 }
 
+.summary-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-item {
+  padding: 12px 14px;
+  border: 1px solid rgba(92, 76, 58, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 251, 245, 0.86);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summary-title {
+  color: #352718;
+  font-weight: 600;
+}
+
+.summary-label,
+.summary-value,
+.summary-error {
+  display: block;
+  margin-top: 4px;
+}
+
+.summary-value {
+  color: #425466;
+}
+
+.summary-error {
+  color: #b42318;
+}
+
 .result-block {
   min-height: 220px;
   max-height: 360px;

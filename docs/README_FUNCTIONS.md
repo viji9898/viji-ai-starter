@@ -15,6 +15,7 @@ Current function groups in this app:
 
 - `auth-login.mjs` for sign-in verification
 - `test-*.mjs` for integration probes
+- `domain-*.mjs` for standalone admin-only delegated domain operations
 - `lib/*.mjs` for shared auth and response helpers
 
 ---
@@ -71,6 +72,9 @@ Current public routes include:
 - `/.netlify/functions/test-openai`
 - `/.netlify/functions/test-sendgrid`
 - `/.netlify/functions/test-db`
+- `/.netlify/functions/domain-users-readonly`
+- `/.netlify/functions/domain-task`
+- `/.netlify/functions/domain-meet`
 
 ---
 
@@ -120,6 +124,7 @@ Responsibilities:
 - replace escaped newlines
 - apply scopes
 - impersonate user
+- allow explicit subject overrides for standalone admin-only routes when required
 
 ---
 
@@ -162,6 +167,13 @@ Each function should:
 - avoid complex abstractions
 - preserve auth and authorization status codes from shared helpers where possible
 
+Standalone delegated domain operations should:
+
+- stay separate from `test-*` workshop probes
+- require an authenticated admin viewer
+- use explicit allowlists for per-user data access
+- prefer the narrowest viable scope and narrow field sets
+
 Current probe responsibilities:
 
 - Gmail: list recent messages with readable metadata
@@ -175,6 +187,12 @@ Current probe responsibilities:
 - OpenAI: list visible models
 - SendGrid: fetch account profile information
 - DB: verify Postgres connectivity and server metadata
+
+Standalone operational routes:
+
+- `domain-users-readonly`: list workspace directory users with narrow readonly fields
+- `domain-task`: read task lists and tasks for allowlisted operational mailboxes only using the delegated Tasks scope
+- `domain-meet`: list this month's Google Meet-backed calendar events for allowlisted operational mailboxes using delegated Calendar readonly access
 
 ---
 

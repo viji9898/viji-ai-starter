@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { CredentialResponse } from "@react-oauth/google";
+import { domainProbes } from "../constants/domainProbes";
 import { probes } from "../constants/probes";
 import { parseResponse, prettyJson } from "../lib/http";
 import {
@@ -24,6 +25,9 @@ export function useAppSession() {
   const [probeResults, setProbeResults] = useState<Record<string, ProbeState>>(
     {},
   );
+  const [domainProbeResults, setDomainProbeResults] = useState<
+    Record<string, ProbeState>
+  >({});
 
   useEffect(() => {
     let cancelled = false;
@@ -120,6 +124,7 @@ export function useAppSession() {
       persistToken(token);
       setSession({ token, user: payload.user });
       setProbeResults({});
+      setDomainProbeResults({});
     } catch (error) {
       clearPersistedToken();
       setSession(null);
@@ -135,6 +140,7 @@ export function useAppSession() {
     clearPersistedToken();
     setSession(null);
     setProbeResults({});
+    setDomainProbeResults({});
   };
 
   const runProbe = async (probe: ProbeDefinition) => {
@@ -178,14 +184,58 @@ export function useAppSession() {
     }
   };
 
+  const runDomainProbe = async (probe: ProbeDefinition) => {
+    if (!session) {
+      return;
+    }
+
+    setDomainProbeResults((current) => ({
+      ...current,
+      [probe.id]: { status: "running" },
+    }));
+
+    try {
+      const response = await fetch(`${functionBasePath}/${probe.endpoint}`, {
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      const payload = await parseResponse(response);
+      const status = response.ok ? "success" : "error";
+
+      setDomainProbeResults((current) => ({
+        ...current,
+        [probe.id]: {
+          status,
+          output: prettyJson(payload),
+        },
+      }));
+    } catch (error) {
+      setDomainProbeResults((current) => ({
+        ...current,
+        [probe.id]: {
+          status: "error",
+          output: prettyJson({
+            success: false,
+            error: error instanceof Error ? error.message : "Request failed.",
+          }),
+        },
+      }));
+    }
+  };
+
   return {
     authBootstrapPending,
     authError,
     authPending,
+    domainProbeResults,
+    domainProbes,
     handleGoogleSuccess,
     handleLogout,
     probeResults,
     probes,
+    runDomainProbe,
     runProbe,
     session,
   };

@@ -104,10 +104,12 @@ Recommended approval model:
 
 ```txt
 ADMIN_EMAILS => admin role + implicitly approved
-APPROVED_EMAILS => non-admin allowlist
+ALLOWED_SIGNIN_EMAILS => non-admin sign-in allowlist
 ```
 
-If `APPROVED_EMAILS` is empty, only explicitly listed admins are approved to sign in.
+Only `ADMIN_EMAILS` users receive admin access to delegated domain routes.
+
+If `ALLOWED_SIGNIN_EMAILS` is empty, only explicitly listed admins are approved to sign in.
 
 ---
 

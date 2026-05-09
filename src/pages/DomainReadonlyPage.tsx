@@ -10,7 +10,7 @@ import type {
 
 const { Paragraph, Title } = Typography;
 
-type WorkspaceTestsPageProps = {
+type DomainReadonlyPageProps = {
   currentPath: string;
   onLogout: () => void;
   onRunProbe: (probe: ProbeDefinition) => void;
@@ -19,16 +19,16 @@ type WorkspaceTestsPageProps = {
   user: AuthenticatedUser;
 };
 
-function WorkspaceTestsPage({
+function DomainReadonlyPage({
   currentPath,
   onLogout,
   onRunProbe,
   probeResults,
   probes,
   user,
-}: WorkspaceTestsPageProps) {
+}: DomainReadonlyPageProps) {
   return (
-    <div className="screen workspace-tests-screen">
+    <div className="screen domain-readonly-screen">
       <AppNavbar
         currentPath={currentPath}
         onLogout={onLogout}
@@ -36,13 +36,14 @@ function WorkspaceTestsPage({
       />
       <section className="home-header">
         <div>
-          <Tag className="eyebrow">Workspace Tests</Tag>
-          <Title>Workspace Tests</Title>
+          <Tag className="eyebrow">Domain Operations</Tag>
+          <Title>Domain Operations</Title>
           <Paragraph className="lead">
-            Run focused backend checks for Gmail, Calendar, Drive, Tasks, Docs,
-            Sheets, Admin SDK, Analytics, OpenAI, SendGrid, and Neon database
-            access using the current authenticated user and the configured backend
-            credentials.
+            Run admin-only delegated operations that query the domain directory
+            and the configured allowlisted task mailboxes. The domain task
+            probe returns mailbox totals alongside the task list data for the
+            allowlisted operational mailboxes. These routes remain separate
+            from the existing workshop tests.
           </Paragraph>
         </div>
       </section>
@@ -56,4 +57,4 @@ function WorkspaceTestsPage({
   );
 }
 
-export default WorkspaceTestsPage;
+export default DomainReadonlyPage;

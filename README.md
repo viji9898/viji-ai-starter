@@ -128,9 +128,11 @@ Authorization is always backend-controlled.
 - frontend gets a Google credential but does not decide access
 - backend verifies the token audience, email, hosted domain, and approval status
 - admin users come from `ADMIN_EMAILS`
-- non-admin users come from `APPROVED_EMAILS`
+- non-admin sign-in users come from `ALLOWED_SIGNIN_EMAILS`
 
-If `APPROVED_EMAILS` is empty, only admins are allowed in.
+Only `ADMIN_EMAILS` users receive the `admin` role and can access admin-only delegated domain routes.
+
+If `ALLOWED_SIGNIN_EMAILS` is empty, only admins are allowed in.
 
 ## Tech Stack
 
@@ -156,7 +158,7 @@ VITE_GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_ID=
 ALLOWED_EMAIL_DOMAIN=example.com
 ADMIN_EMAILS=admin@example.com
-APPROVED_EMAILS=
+ALLOWED_SIGNIN_EMAILS=
 
 DATABASE_URL=
 
@@ -176,8 +178,8 @@ Key notes:
 - `VITE_GOOGLE_CLIENT_ID` is the browser-side Google OAuth client id for Google Sign-In
 - `GOOGLE_CLIENT_ID` is the backend audience value used when verifying Google ID tokens
 - `ALLOWED_EMAIL_DOMAIN` restricts human access to one Google Workspace domain
-- `ADMIN_EMAILS` is a comma-separated admin list; admins are implicitly approved
-- `APPROVED_EMAILS` is the comma-separated allowlist for non-admin users
+- `ADMIN_EMAILS` is a comma-separated admin list; only these users receive admin access to delegated domain routes
+- `ALLOWED_SIGNIN_EMAILS` is the comma-separated allowlist for non-admin sign-in users
 - `GOOGLE_IMPERSONATION_USER` is the Workspace user impersonated by the delegated service account
 - `GOOGLE_DOCS_TEST_DOCUMENT_ID` and `GOOGLE_SHEETS_TEST_SPREADSHEET_ID` are only required for the Docs and Sheets probes
 - `DATABASE_URL`, `OPENAI_API_KEY`, and `SENDGRID_API_KEY` are optional unless you want those specific probes to work
