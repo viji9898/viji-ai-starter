@@ -66,7 +66,7 @@ export const handler = async (event) => {
   try {
     const user = await requireAuth(event);
     const connectionString = normalizeConnectionString(
-      getRequiredEnv("DATABASE_URL")
+      getRequiredEnv("DATABASE_URL"),
     );
     const project = getProjectMetadata(connectionString);
 
