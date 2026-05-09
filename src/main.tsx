@@ -8,6 +8,11 @@ import "./index.css";
 import App from "./App.tsx";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim() ?? "";
+const appTitle = import.meta.env.DEV
+  ? "DEV | viji-ai-starter"
+  : "LIVE | viji-ai-starter";
+
+document.title = appTitle;
 
 const app = (
   <BrowserRouter>
