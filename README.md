@@ -1,6 +1,6 @@
-# app-victor
+# viji-ai-starter
 
-`app-victor` is an internal Google Workspace assistant shell for authenticated operational tooling.
+`viji-ai-starter` is an internal Google Workspace assistant shell for authenticated operational tooling.
 
 Today, the app is focused on one job: let an approved Google Workspace user sign in, then run backend-only connectivity and capability checks against the services this assistant will depend on.
 

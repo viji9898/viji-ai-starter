@@ -1,4 +1,4 @@
-const sessionStorageKey = "app-victor.google-id-token";
+const sessionStorageKey = "viji-ai-starter.google-id-token";
 
 export function loadStoredToken() {
   return window.localStorage.getItem(sessionStorageKey)?.trim() ?? "";
