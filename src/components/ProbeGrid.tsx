@@ -1,7 +1,20 @@
-import { Button, Card, Col, Divider, Row, Space, Typography } from "antd";
+import { Button, Card, Col, Divider, Row, Space, Table, Typography } from "antd";
 import type { ProbeDefinition, ProbeState } from "../types/app";
 
 const { Paragraph, Text: AntText, Title: AntTitle } = Typography;
+
+type DomainMeetMinutesRow = {
+  key: string;
+  fileId: string;
+  title: string;
+  meeting: string;
+  mailbox: string;
+  when: string;
+  startedAt: number | null;
+  conferenceId: string | null;
+  fileUrl: string | null;
+  error: string | null;
+};
 
 type ProbeGridProps = {
   onRunProbe: (probe: ProbeDefinition) => void;
@@ -19,6 +32,12 @@ function parseProbeOutput(output?: string) {
   } catch {
     return null;
   }
+}
+
+function parseDateValue(value: string) {
+  const timestamp = Date.parse(value);
+
+  return Number.isNaN(timestamp) ? null : timestamp;
 }
 
 function renderDomainSummary(probeId: string, output?: string) {
@@ -122,6 +141,157 @@ function renderDomainSummary(probeId: string, output?: string) {
     );
   }
 
+  if (probeId === "domain-meet-minutes") {
+    const totalUniqueMinutes =
+      typeof parsed.totalUniqueMinutes === "number"
+        ? parsed.totalUniqueMinutes
+        : null;
+
+    const minuteRows: DomainMeetMinutesRow[] = results
+      .flatMap((item, index) => {
+        const title =
+          typeof item.title === "string" ? item.title : `Minutes ${index + 1}`;
+        const fileUrl = typeof item.fileUrl === "string" ? item.fileUrl : null;
+        const fileId = typeof item.fileId === "string" ? item.fileId : `file-${index}`;
+        const error = typeof item.error === "string" ? item.error : null;
+        const sourceEvents = Array.isArray(item.sourceEvents)
+          ? item.sourceEvents.filter(
+              (eventItem): eventItem is Record<string, unknown> =>
+                Boolean(eventItem) && typeof eventItem === "object",
+            )
+          : [];
+
+        if (sourceEvents.length === 0) {
+          return [
+            {
+              key: `${fileId}-0`,
+              fileId,
+              title,
+              meeting: "Unknown meeting",
+              mailbox: "-",
+              when: "-",
+              startedAt: null,
+              conferenceId: null,
+              fileUrl,
+              error,
+            },
+          ];
+        }
+
+        return sourceEvents.map((eventItem, eventIndex) => ({
+          key: `${fileId}-${eventIndex}`,
+          fileId,
+          title,
+          meeting:
+            typeof eventItem.eventSummary === "string" && eventItem.eventSummary.trim()
+              ? eventItem.eventSummary
+              : "Untitled meeting",
+          mailbox:
+            typeof eventItem.mailbox === "string" ? eventItem.mailbox : "-",
+          when:
+            typeof eventItem.start === "string" && eventItem.start.trim()
+              ? eventItem.start
+              : "-",
+          startedAt:
+            typeof eventItem.start === "string" && eventItem.start.trim()
+              ? parseDateValue(eventItem.start)
+              : null,
+          conferenceId:
+            typeof eventItem.conferenceId === "string"
+              ? eventItem.conferenceId
+              : null,
+          fileUrl,
+          error,
+        }));
+      })
+      .filter((row, index, rows) => {
+        const dedupeKey = `${row.fileId}:${row.conferenceId ?? row.meeting}:${row.when}`;
+
+        return (
+          rows.findIndex(
+            (candidate) =>
+              `${candidate.fileId}:${candidate.conferenceId ?? candidate.meeting}:${candidate.when}` ===
+              dedupeKey,
+          ) === index
+        );
+      })
+      .sort((left, right) => {
+        if (left.startedAt === null && right.startedAt === null) {
+          return 0;
+        }
+
+        if (left.startedAt === null) {
+          return 1;
+        }
+
+        if (right.startedAt === null) {
+          return -1;
+        }
+
+        return right.startedAt - left.startedAt;
+      });
+
+    return (
+      <div className="summary-block">
+        <div className="summary-item">
+          <AntText className="summary-label">Unique minutes docs</AntText>
+          <AntText className="summary-value">{totalUniqueMinutes ?? 0}</AntText>
+        </div>
+        <div className="summary-table-wrapper">
+          <Table
+            className="minutes-summary-table"
+            columns={[
+              {
+                title: "Meeting",
+                dataIndex: "meeting",
+                key: "meeting",
+                render: (value: string, row: DomainMeetMinutesRow) => (
+                  <div>
+                    <div className="minutes-table-title">{value}</div>
+                    <div className="minutes-table-subtitle">{row.title}</div>
+                  </div>
+                ),
+              },
+              {
+                title: "Mailbox",
+                dataIndex: "mailbox",
+                key: "mailbox",
+              },
+              {
+                title: "Start",
+                dataIndex: "when",
+                key: "when",
+              },
+              {
+                title: "Minutes",
+                key: "minutes",
+                render: (_value: unknown, row: DomainMeetMinutesRow) =>
+                  row.error ? (
+                    <AntText className="summary-error">{row.error}</AntText>
+                  ) : row.fileUrl ? (
+                    <Button type="link" href={row.fileUrl} target="_blank">
+                      Open Gemini minutes
+                    </Button>
+                  ) : (
+                    <AntText className="summary-value">No doc link</AntText>
+                  ),
+              },
+            ]}
+            dataSource={minuteRows}
+            pagination={{
+              pageSize: 10,
+              hideOnSinglePage: true,
+              showSizeChanger: true,
+              pageSizeOptions: ["10", "25", "50"],
+            }}
+            size="small"
+            scroll={{ x: 900 }}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return null;
 }
 
@@ -131,9 +301,10 @@ function ProbeGrid({ onRunProbe, probeResults, probes }: ProbeGridProps) {
       {probes.map((probe) => {
         const result = probeResults[probe.id];
         const busy = result?.status === "running";
+        const isFullWidth = probe.id === "domain-meet-minutes";
 
         return (
-          <Col xs={24} lg={8} key={probe.id}>
+          <Col xs={24} lg={isFullWidth ? 24 : 8} key={probe.id}>
             <Card className="panel probe-card" variant="borderless">
               <Space direction="vertical" size="middle" className="fill-width">
                 <div>

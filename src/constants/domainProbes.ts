@@ -22,4 +22,11 @@ export const domainProbes: ProbeDefinition[] = [
     description:
       "Lists this month's Google Meet-backed calendar events for the configured allowlisted mailboxes.",
   },
+  {
+    id: "domain-meet-minutes",
+    title: "Domain Meet Minutes",
+    endpoint: "domain-meet-minutes",
+    description:
+      "Collects unique Gemini meeting-minutes documents attached to Google Meet events year to date across the allowlisted mailboxes without duplicating the same notes doc.",
+  },
 ];

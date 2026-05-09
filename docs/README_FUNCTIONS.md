@@ -75,6 +75,7 @@ Current public routes include:
 - `/.netlify/functions/domain-users-readonly`
 - `/.netlify/functions/domain-task`
 - `/.netlify/functions/domain-meet`
+- `/.netlify/functions/domain-meet-minutes`
 
 ---
 
@@ -193,6 +194,7 @@ Standalone operational routes:
 - `domain-users-readonly`: list workspace directory users with narrow readonly fields
 - `domain-task`: read task lists and tasks for allowlisted operational mailboxes only using the delegated Tasks scope
 - `domain-meet`: list this month's Google Meet-backed calendar events for allowlisted operational mailboxes using delegated Calendar readonly access
+- `domain-meet-minutes`: collect unique Gemini meeting-minutes docs attached to this month's Meet events across allowlisted operational mailboxes using delegated Calendar readonly and Docs readonly access
 
 ---
 
